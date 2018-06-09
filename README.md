@@ -33,65 +33,65 @@ phplogic
           allCount  同等条件下所有的数据数量，便于分页，显示总数等使用
           count     本页有多少条数据
           msg       返回消息
-使用方法： 
-    4.1 引用
-      include 'db/logic.php';
-    4.2 实例化：
-      $fun = new logic();
-    4.3操作：
-      插入      insert("表名",“插入集合”)
-      批量插入  inserts("表名",“数据集合”)
-      查询      select(“表名【字符串】”，“返回字段【数组】”，“条件集【数组、字符串】”，“分页操作，模糊查询等”，“是否仅仅返回数量，可以传布尔值，不传值默认返回所有”);
-      修改      update("表名","修改键值对数组","条件集合");
-      删除      delete("表名",“条件集”);
-      4.3.0 返回字段值（传入字段值array即可）
-      echo json_encode($fun->select("tr_company",array('id','name','s_option'),$obj,""));
-      4.3.1 插入语句（key=字段名  value=匹配值）
-      $obj = array();
-      $obj["uid"] = $_POST["uid"];
-      $obj["name"] = $_POST["name"];
-      $obj["input_time"] = date("Y-m-d H:i:s",time());
-      $obj["state"] = 0;
-      //得到执行结果输出json
-      echo json_encode($fun->insert("tr_purchase",$obj));
-      4.3.2 查询
-        $obj = array();
-        $obj["template"] = $_POST['template'];
-        $obj["name"] = $_POST['name'];
-        $company = $fun->select("tr_company","",$obj,"");
-        echo json_encode(company);
-        //分页操作  page  第几行     row   列数
-         $sort["page"] = $_POST["page"];
-         $sort["row"] = 8; 
-         //排序操作  orderbydesc   降序             orderby   升序
-         $sort["orderbydesc"] = "upload_time";
-         $company = $fun->select("tr_company","",$obj,$sort);
-         echo json_encode(company);
-         //模糊查询
-         $obj["like_word"] = "字段名";
-         $obj["like_word_value"] = "'%".$_POST["模糊值"]."%'";
-         $fun->select("tr_company","",$obj,"");
-         //多值查询，多表联合查询(查询某字段对应的多个值)【多表联合查询时可分步骤使用此方法，效率提升n倍】
-         $id[] = 1;
-         $id[] = 2;
-         $id[] = 3;
-         $id[] = 4;
-         $obj["id"] = $id;
-         $fun->select("tr_company","",$obj,"");
-         //对比符条件查询 【可以是  >   <   != 】
+    使用方法： 
+        4.1 引用
+          include 'db/logic.php';
+        4.2 实例化：
+          $fun = new logic();
+        4.3操作：
+          插入      insert("表名",“插入集合”)
+          批量插入  inserts("表名",“数据集合”)
+          查询      select(“表名【字符串】”，“返回字段【数组】”，“条件集【数组、字符串】”，“分页操作，模糊查询等”，“是否仅仅返回数量，可以传布尔值，不传值默认返回所有”);
+          修改      update("表名","修改键值对数组","条件集合");
+          删除      delete("表名",“条件集”);
+          4.3.0 返回字段值（传入字段值array即可）
+          echo json_encode($fun->select("tr_company",array('id','name','s_option'),$obj,""));
+          4.3.1 插入语句（key=字段名  value=匹配值）
           $obj = array();
-          $obj["user_id"] =  $_POST["uid"];
-          $obj["s_option !="] =  2;
-          echo json_encode($fun->select("tr_company",array( 'name','s_option'),$obj,""));
-       4.3.3 修改操作
+          $obj["uid"] = $_POST["uid"];
           $obj["name"] = $_POST["name"];
-          $c["id"] = $_POST["historyId"];
-          echo json_encode($fun->update("tr_service",$obj,$c));
-          //计数器操作（用于增加访问量，浏览量等快速修改）
-          $obj["id"] = $_POST["h_id"];
-          $change = "page_view = page_view + 1 ";
-          $res = $db->update($oe_content,$change,$obj);
-       4.3.4  删除操作
-          $objs["id"] = $_POST["c_id"]; 
-          $ren = $db->delete($oe_collect,$obj);
-      
+          $obj["input_time"] = date("Y-m-d H:i:s",time());
+          $obj["state"] = 0;
+          //得到执行结果输出json
+          echo json_encode($fun->insert("tr_purchase",$obj));
+          4.3.2 查询
+            $obj = array();
+            $obj["template"] = $_POST['template'];
+            $obj["name"] = $_POST['name'];
+            $company = $fun->select("tr_company","",$obj,"");
+            echo json_encode(company);
+            //分页操作  page  第几行     row   列数
+             $sort["page"] = $_POST["page"];
+             $sort["row"] = 8; 
+             //排序操作  orderbydesc   降序             orderby   升序
+             $sort["orderbydesc"] = "upload_time";
+             $company = $fun->select("tr_company","",$obj,$sort);
+             echo json_encode(company);
+             //模糊查询
+             $obj["like_word"] = "字段名";
+             $obj["like_word_value"] = "'%".$_POST["模糊值"]."%'";
+             $fun->select("tr_company","",$obj,"");
+             //多值查询，多表联合查询(查询某字段对应的多个值)【多表联合查询时可分步骤使用此方法，效率提升n倍】
+             $id[] = 1;
+             $id[] = 2;
+             $id[] = 3;
+             $id[] = 4;
+             $obj["id"] = $id;
+             $fun->select("tr_company","",$obj,"");
+             //对比符条件查询 【可以是  >   <   != 】
+              $obj = array();
+              $obj["user_id"] =  $_POST["uid"];
+              $obj["s_option !="] =  2;
+              echo json_encode($fun->select("tr_company",array( 'name','s_option'),$obj,""));
+           4.3.3 修改操作
+              $obj["name"] = $_POST["name"];
+              $c["id"] = $_POST["historyId"];
+              echo json_encode($fun->update("tr_service",$obj,$c));
+              //计数器操作（用于增加访问量，浏览量等快速修改）
+              $obj["id"] = $_POST["h_id"];
+              $change = "page_view = page_view + 1 ";
+              $res = $db->update($oe_content,$change,$obj);
+           4.3.4  删除操作
+              $objs["id"] = $_POST["c_id"]; 
+              $ren = $db->delete($oe_collect,$obj);
+
