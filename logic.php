@@ -382,6 +382,30 @@ class logic{
 		$sql = "delete from ".$formName." where ".$conditions;
 		return $this->activity("d",$sql,0); 
 	}
-
+    /**
+     * @insert     批量插入语句拼接
+     * @$formName  表名
+     * @$keys       字段名    a,b,c  字符串
+     * @$obj     对应的批量数据数组
+     * */
+    public function inserts($formName,$keys,$obj){
+        $values = "";
+        foreach ($obj as $key => $value){
+            $obj1 = $value;
+            $valueb = "";
+            for($f = 0;$f<count($obj1);$f++){
+                $valuea = $obj1[$f];
+                if(gettype($obj1[$f]) == "string"){
+                    $valuea = "'".$obj1[$f]."'";
+                }
+                $valueb .= $valuea.",";
+            }
+            $valueb = substr($valueb,0,strlen($valueb)-1);
+            $values .= "(".$valueb."),";
+        }
+        $values = substr($values,0,strlen($values)-1);
+        $sql = "insert into ".$formName." (".$keys.") values ".$values;
+        return $this->activity("a",$sql,0);
+    }
 }
 ?>
