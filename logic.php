@@ -4,11 +4,13 @@ class logic{
 	protected $pdbName;
 	protected $pdbPassWord;
 	protected $pdbUserName;
+	protected $rSql;
 	function __construct() {
 		$this->pdbLink = "121.43.37.189";
-		$this->pdbName = "trademark";
+		$this->pdbName = "qyty";
 		$this->pdbPassWord = "root";
 		$this->pdbUserName = "root";
+		$this->rSql = true;
 	}
 	public function activity($type,$sql,$sNum){
 		$list = array(); 
@@ -19,12 +21,8 @@ class logic{
 			$list["code"] = 1;
 			$list["msg"] = "数据库连接错误";
 			return $list;
-		} 
+		}
 		$conn->set_charset("UTF8mb4");
-// 		$sql = "select * from sc_test";
-// 		$sql = "insert into sc_test (name, type) values ('小明',1)";
-// 		$sql = "update sc_test set name = '小虎dui' where id = 2";
-// 		$sql = "delete from sc_test where id = 2"; 
 		/**
 		 * s  select 查询
 		 * a  add    添加
@@ -33,18 +31,16 @@ class logic{
 		 * c  count  统计查询条数
 		 * */ 
 		$result = $conn->query($sql);
-		$list["sql"] = $sql;
+		if($this->rSql){
+			$list["sql"] = $sql;
+		}
 		switch ($type){
 			case "c":
 				if ($result)
 				{
-					if ($result->num_rows>0)
-					{
-						return $result->num_rows;
-					}else{ 
-						return 0;
-					}
-				}else{ 
+                    $num_arr = $result->fetch_array(MYSQL_ASSOC);
+                    return intval($num_arr["count(*)"]);
+				}else{
 					return -1;
 				}
 				break;
@@ -134,7 +130,7 @@ class logic{
  		return $this->activity("a",$sql,0); 
 	}
 	/**
-	 * @cselect    统计查询条数  
+	 * @cselect   统计查询条数
 	 * @$formName  表名
 	 * @$result    需要的字段
 	 * @$obj       条件数组
@@ -264,17 +260,14 @@ class logic{
 			$condition= "";
 		}
 		if($count){
-            $sql = "select ".$results." from ".$formName." ".$condition." ".$sorts;
+            $sql = "select count(*) from ".$formName." ".$condition." ".$sorts;
             $sNum = $this->activity("c",$sql,0);
             return $sNum;
         }
-		$sql = "select ".$results." from ".$formName." ".$condition." ".$sorts; 
+		$sql = "select count(*) from ".$formName." ".$condition." ".$sorts;
 		$sNum = $this->activity("c",$sql,0); 
 		$sql = "select ".$results." from ".$formName." ".$condition." ".$sorts." ".$limit;
 		return $this->activity("s",$sql,$sNum);
-		// 		$sql = "select * from sc_test";
-		// 		$sql = "insert into sc_test (name, type) values ('小明',1)";
-		// 		$sql = "update sc_test set name = '小虎dui' where id = 2";
 	} 
 	/**
 	 * @selectJoin   多标联合查询
